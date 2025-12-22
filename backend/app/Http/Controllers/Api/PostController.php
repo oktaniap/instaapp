@@ -10,7 +10,10 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('user')->latest()->get();
+        $posts = Post::with('user')
+            ->withCount('likes')
+            ->latest()
+            ->get();
         return response()->json($posts);
     }
 
@@ -37,7 +40,9 @@ class PostController extends Controller
 
     public function show($id)
     {
-        $post = Post::with('user')->findOrFail($id);
+        $post = Post::with('user')
+            ->withCount('likes')
+            ->findOrFail($id);
         return response()->json($post);
     }
 
