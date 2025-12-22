@@ -24,10 +24,13 @@ Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/posts', [PostController::class, 'index']);
     Route::post('/posts', [PostController::class, 'store']);
+    Route::get('/posts/{id}', [PostController::class, 'show']);
+    Route::delete('/posts/{id}', [PostController::class, 'destroy']);
 });
+
 
 
 

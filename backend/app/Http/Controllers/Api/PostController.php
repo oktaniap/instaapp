@@ -8,6 +8,12 @@ use App\Models\Post;
 
 class PostController extends Controller
 {
+    public function index()
+    {
+        $posts = Post::with('user')->latest()->get();
+        return response()->json($posts);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -15,9 +21,10 @@ class PostController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
-        $path = null;
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('posts', 'public');
+        } else {
+            $path = null;
         }
 
         $post = auth()->user()->posts()->create([
@@ -26,6 +33,20 @@ class PostController extends Controller
         ]);
 
         return response()->json($post, 201);
+    }
+
+    public function show($id)
+    {
+        $post = Post::with('user')->findOrFail($id);
+        return response()->json($post);
+    }
+
+    public function destroy($id)
+    {
+        $post = auth()->user()->posts()->findOrFail($id);
+        $post->delete();
+
+        return response()->json(['message' => 'Post deleted']);
     }
 }
 
