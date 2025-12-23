@@ -9,24 +9,23 @@ use App\Models\Post;
 
 class LikeController extends Controller
 {
-    public function toggle($postId)
+    public function toggle(Post $post)
     {
-        $post = Post::findOrFail($postId);
+        $user = auth()->user();
 
-        $like = Like::where('user_id', auth()->id())
-                    ->where('post_id', $post->id)
-                    ->first();
+        $like = $post->likes()->where('user_id', $user->id)->first();
 
         if ($like) {
             $like->delete();
-            return response()->json(['liked' => false]);
+        } else {
+            $post->likes()->create([
+                'user_id' => $user->id
+            ]);
         }
 
-        Like::create([
-            'user_id' => auth()->id(),
-            'post_id' => $post->id
+        return response()->json([
+            'liked' => !$like,
+            'likes_count' => $post->likes()->count()
         ]);
-
-        return response()->json(['liked' => true]);
     }
 }

@@ -10,11 +10,15 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('user')
-            ->withCount('likes')
+        return Post::with('user')
+            ->withCount(['likes', 'comments']) // 🔥 JUMLAH
+            ->withExists([
+                'likes as is_liked' => function ($q) {
+                    $q->where('user_id', auth()->id());
+                }
+            ])
             ->latest()
             ->get();
-        return response()->json($posts);
     }
 
     public function store(Request $request)
@@ -43,6 +47,10 @@ class PostController extends Controller
         $post = Post::with('user')
             ->withCount('likes')
             ->findOrFail($id);
+        $post->liked_by_me = $post->likes()
+            ->where('user_id', auth()->id())
+            ->exists();
+
         return response()->json($post);
     }
 
