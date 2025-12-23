@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <h2>Home Feed</h2>
 
     <div v-if="loading" class="info">Loading posts...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
@@ -11,13 +10,21 @@
         :key="post.id"
         class="post"
       >
-        <strong>{{ post.user.name }}</strong>
+        <div class="post-header">
+            <img
+            :src="avatarUrl(post.user.name)"
+            class="avatar"
+            />
+            <strong>{{ post.user.name }}</strong>
+        </div>
 
-        <img
-          v-if="post.image"
-          :src="imageUrl(post.image)"
-          class="post-image"
-        />
+        <div class="image-wrapper">
+            <img
+                v-if="post.image"
+                :src="imageUrl(post.image)"
+                class="post-image"
+            />
+        </div>
 
         <p>{{ post.content }}</p>
 
@@ -83,6 +90,10 @@ export default {
 
     imageUrl(path) {
       return `http://127.0.0.1:8000/storage/${path}`
+    },
+
+    avatarUrl(name) {
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff`
     }
   }
 }
@@ -102,10 +113,20 @@ export default {
   margin-bottom: 20px;
 }
 
-.post-image {
+.image-wrapper {
   width: 100%;
-  border-radius: 6px;
-  margin: 10px 0;
+  height: 500px; 
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.post-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .actions {
@@ -159,6 +180,23 @@ button.liked {
 .like-btn:hover,
 .comment-btn:hover {
   opacity: 0.7;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.content {
+  margin: 10px 0;
 }
 
 </style>

@@ -35,6 +35,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts/{post}/like', [LikeController::class, 'toggle']);
     Route::post('/posts/{post}/comments', [CommentController::class, 'store']);
     Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
+    Route::get('/my-posts', function (Request $request) {
+        return $request->user()
+            ->posts()
+            ->latest()
+            ->withCount(['likes', 'comments'])
+            ->get();
+    });
 });
 
 
