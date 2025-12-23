@@ -1,17 +1,16 @@
 <template>
-  <Navbar v-if="isLogin" />
+  <Navbar v-if="auth.loggedIn" />
   <router-view />
 </template>
 
 <script>
 import Navbar from './components/Navbar.vue'
+import { auth } from './auth'
 
 export default {
   components: { Navbar },
-  computed: {
-    isLogin() {
-      return !!localStorage.getItem('token')
-    }
+  setup() {
+    return { auth }
   }
 }
 </script>

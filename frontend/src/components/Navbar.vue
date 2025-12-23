@@ -8,16 +8,17 @@
       <router-link to="/home" class="menu-item">🏠 Home</router-link>
       <router-link to="/create-post" class="menu-item">➕ Post</router-link>
       <router-link to="/profile" class="menu-item">👤 Akun</router-link>
-      <button class="menu-item logout" @click="logout">🚪 Logout</button>
+      <button class="menu-item logout" @click="logout">⏻ Logout</button>
     </div>
   </nav>
 </template>
 
 <script>
+import { logout } from '../auth'
 export default {
   methods: {
     logout() {
-      localStorage.removeItem('token')
+      logout()
       this.$router.push('/login')
     }
   }

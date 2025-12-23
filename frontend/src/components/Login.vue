@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { login } from '../auth'
 export default {
   data() {
     return {
@@ -23,12 +24,11 @@ export default {
     async login() {
         try {
             const res = await this.$axios.post('/api/login', {
-            email: this.email,
-            password: this.password
+                email: this.email,
+                password: this.password
             })
 
-            localStorage.setItem('token', res.data.token)
-
+            login(res.data.token)
             this.$router.push('/home')
         } catch (err) {
             this.error = 'Login gagal'
