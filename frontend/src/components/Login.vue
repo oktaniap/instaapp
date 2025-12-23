@@ -1,14 +1,39 @@
 <template>
-  <div class="login-form">
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-        <input type="email" v-model="email" placeholder="Email" required />
-        <input type="password" v-model="password" placeholder="Password" required />
+  <div class="login-wrapper">
+    <div class="login-form">
+      <h2>InstaApp</h2>
+      <p>Login ke akunmu</p>
+
+      <form @submit.prevent="login">
+        <input
+          type="email"
+          v-model="email"
+          placeholder="Email"
+          required
+        />
+
+        <input
+          type="password"
+          v-model="password"
+          placeholder="Password"
+          required
+        />
+
         <button type="submit">Login</button>
-    </form>
-    <p v-if="error">{{ error }}</p>
+      </form>
+
+      <p v-if="error" class="error">{{ error }}</p>
+
+      <div class="divider"></div>
+
+      <p class="register-text">
+        Belum punya akun?
+        <router-link to="/register">Daftar</router-link>
+      </p>
     </div>
+  </div>
 </template>
+
 
 <script>
 import { login } from '../auth'
@@ -38,7 +63,7 @@ export default {
 }
 </script>
 <style>
-    body {
+body {
   font-family: Arial, sans-serif;
   background-color: #f0f2f5;
   margin: 0;
@@ -52,6 +77,12 @@ export default {
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.login-form input,
+.login-form button {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .login-form h2 {
@@ -77,12 +108,19 @@ export default {
   cursor: pointer;
 }
 
+.login-form .divider {
+  height: 1px;
+  background: #ddd;
+  margin: 1.5rem 0;
+}
+
 .login-form button:hover {
   background-color: #0056b3;
 }
 
 .login-form p {
-  color: red;
+  margin-bottom: 1.5rem;
+  color: #555;
   text-align: center;
 }
 
