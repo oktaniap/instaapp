@@ -3,13 +3,17 @@ import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import Register from '../components/Register.vue'
 import PostDetail from '../components/PostDetail.vue'
+import CreatePost from '../components/CreatePost.vue'
+import Profile from '../components/Profile.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', component: Login },
   { path: '/home', component: Home },
   { path: '/register', component: Register },
-  { path: '/posts/:id', component: PostDetail }
+  { path: '/posts/:id', component: PostDetail },
+  { path: '/create-post', component: CreatePost },
+  { path: '/profile', component: Profile }
 ]
 
 const router = createRouter({

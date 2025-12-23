@@ -1,23 +1,17 @@
-<!-- <template>
-  <div id="app">
-    <router-view></router-view> 
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'App'
-}
-</script> -->
-
 <template>
-  <div class="min-h-screen bg-gray-100">
-    <router-view></router-view>
-  </div>
+  <Navbar v-if="isLogin" />
+  <router-view />
 </template>
 
 <script>
+import Navbar from './components/Navbar.vue'
+
 export default {
-  name: 'App'
+  components: { Navbar },
+  computed: {
+    isLogin() {
+      return !!localStorage.getItem('token')
+    }
+  }
 }
 </script>
