@@ -1,14 +1,23 @@
-<template>
-  <div>
-    <Login />
-    <!-- nanti PostList bisa ditampilkan setelah login -->
+<!-- <template>
+  <div id="app">
+    <router-view></router-view> 
   </div>
 </template>
 
 <script>
-import Login from './components/Login.vue'
-
 export default {
-  components: { Login }
+  name: 'App'
+}
+</script> -->
+
+<template>
+  <div class="min-h-screen bg-gray-100">
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App'
 }
 </script>

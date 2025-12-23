@@ -2,16 +2,12 @@
   <div class="login-form">
     <h2>Login</h2>
     <form @submit.prevent="login">
-      <div>
         <input type="email" v-model="email" placeholder="Email" required />
-      </div>
-      <div>
         <input type="password" v-model="password" placeholder="Password" required />
-      </div>
-      <button type="submit">Login</button>
+        <button type="submit">Login</button>
     </form>
     <p v-if="error">{{ error }}</p>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -26,15 +22,12 @@ export default {
   methods: {
     async login() {
       try {
-        
-        await this.$axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie')
-        // Login
-        await this.$axios.post('/login', {
+        await this.$axios.get('/sanctum/csrf-cookie')
+        await this.$axios.post('/api/login', {
           email: this.email,
           password: this.password
         })
-        alert('Login berhasil!')
-        
+        this.$router.push('/home')
       } catch (err) {
         this.error = 'Login gagal'
         console.error(err)
