@@ -21,18 +21,69 @@ export default {
   },
   methods: {
     async login() {
-      try {
-        await this.$axios.get('/sanctum/csrf-cookie')
-        await this.$axios.post('/api/login', {
-          email: this.email,
-          password: this.password
-        })
-        this.$router.push('/home')
-      } catch (err) {
-        this.error = 'Login gagal'
-        console.error(err)
-      }
+        try {
+            const res = await this.$axios.post('/api/login', {
+            email: this.email,
+            password: this.password
+            })
+
+            localStorage.setItem('token', res.data.token)
+
+            this.$router.push('/home')
+        } catch (err) {
+            this.error = 'Login gagal'
+        }
     }
   }
 }
 </script>
+<style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+}
+
+.login-form {
+  max-width: 400px;
+  margin: 100px auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #0056b3;
+}
+
+.login-form p {
+  color: red;
+  text-align: center;
+}
+
+</style>
