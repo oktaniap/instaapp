@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-
     <div v-if="loading" class="info">Loading posts...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
 
@@ -8,38 +7,26 @@
       <div
         v-for="post in posts"
         :key="post.id"
-        class="post"
+        class="post-card"
       >
         <div class="post-header">
-            <img
-            :src="avatarUrl(post.user.name)"
-            class="avatar"
-            />
-            <strong>{{ post.user.name }}</strong>
+          <div class="avatar">{{ initials(post.user.name) }}</div>
+          <strong>{{ post.user.name }}</strong>
         </div>
 
-        <div class="image-wrapper">
-            <img
-                v-if="post.image"
-                :src="imageUrl(post.image)"
-                class="post-image"
-            />
+        <div class="image-wrapper" v-if="post.image">
+          <img :src="imageUrl(post.image)" />
         </div>
 
-        <p>{{ post.content }}</p>
+        <p class="post-content">{{ post.content }}</p>
 
         <div class="actions">
-            <button class="like-btn" @click="toggleLike(post)">
-                {{ post.is_liked ? '💖' : '🤍' }}
-                <span>{{ post.likes_count }}</span>
-            </button>
-
-            <router-link
-                class="comment-btn"
-                :to="`/posts/${post.id}`"
-            >
-                💬 <span>{{ post.comments_count }}</span>
-            </router-link>
+          <button class="like-btn" @click="toggleLike(post)">
+            {{ post.is_liked ? '💖' : '🤍' }} {{ post.likes_count }}
+          </button>
+          <router-link class="comment-btn" :to="`/posts/${post.id}`">
+            💬 {{ post.comments_count }}
+          </router-link>
         </div>
       </div>
     </div>
@@ -75,7 +62,6 @@ export default {
     async toggleLike(post) {
       try {
         await this.$axios.post(`/api/posts/${post.id}/like`)
-
         if (post.is_liked) {
           post.likes_count--
           post.is_liked = false
@@ -92,8 +78,12 @@ export default {
       return `http://127.0.0.1:8000/storage/${path}`
     },
 
-    avatarUrl(name) {
-        return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff`
+    initials(name) {
+      return name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
     }
   }
 }
@@ -103,67 +93,64 @@ export default {
 .home {
   max-width: 600px;
   margin: 30px auto;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
-.post {
+.post-card {
   background: #fff;
-  padding: 15px;
-  border-radius: 8px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  padding: 14px;
   margin-bottom: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
-.image-wrapper {
-  width: 100%;
-  height: 500px; 
-  background: black;
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ddd;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  font-weight: 600;
+  color: #555;
+  font-size: 14px;
 }
 
-.post-image {
+.image-wrapper img {
+  width: 100%;
+  height: 500px; 
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.post-content {
+  font-size: 15px;
+  margin-bottom: 10px;
 }
 
 .actions {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-top: 8px;
 }
 
-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-button.liked {
-  color: red;
-  font-weight: bold;
-}
-
-.comment-link {
-  text-decoration: none;
-  color: #555;
-}
-
-.info {
-  text-align: center;
-  color: #777;
-}
-
-.error {
-  text-align: center;
-  color: red;
-}
-
-.like-btn,
+button.like-btn,
 .comment-btn {
   background: none;
   border: none;
@@ -176,27 +163,18 @@ button.liked {
   color: #333;
   text-decoration: none;
 }
-
-.like-btn:hover,
+button.like-btn:hover,
 .comment-btn:hover {
   opacity: 0.7;
 }
 
-.post-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+.info {
+  text-align: center;
+  color: #777;
 }
 
-.avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.error {
+  text-align: center;
+  color: red;
 }
-
-.content {
-  margin: 10px 0;
-}
-
 </style>
